@@ -1,0 +1,416 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# SKILLFORGE BUILDER - Domain Edge Cases for Testing Pipeline
+# ═══════════════════════════════════════════════════════════════════════════════
+# These test cases verify the SkillForge Builder produces expert-level skills,
+# not generic templates. Run against the testing pipeline to validate quality.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+domain_edge_cases:
+  domain: "AI Skill Creation / Meta-Skill Building"
+  skill_name: "skillforge-builder"
+  version: "2.0.0"
+  minimum_pass_rate: 0.85
+  
+  description: |
+    Edge cases specific to building AI cognitive skills. These verify
+    the SkillForge Builder produces genuinely expert-level skills, not templates.
+    A meta-skill that doesn't test itself cannot be trusted.
+  
+  cases:
+    # ─────────────────────────────────────────────────────────────────────────
+    # SCOPE ASSESSMENT TESTS
+    # ─────────────────────────────────────────────────────────────────────────
+    
+    - id: decomposition_detection
+      category: scope_assessment
+      priority: critical
+      scenario: "User requests broad skill that should be decomposed"
+      naive_failure: "Creates monolithic skill cramming multiple domains"
+      expert_behavior: "Detects scope, proposes skill suite with index"
+      test_input: "Create a skill for frontend development"
+      must_check:
+        - "Identifies multiple sub-domains (react, css, performance, etc.)"
+        - "Proposes decomposed structure with index skill"
+        - "Does NOT generate single monolithic skill"
+        - "Follow-up offers suite options"
+      anti_patterns:
+        - "Here's your Frontend Development skill:"
+        - "Single skill covering react, css, testing, performance in one file"
+        - "Monolithic 15000+ token skill"
+      scoring:
+        decomposition_proposed: 3
+        index_skill_included: 2
+        sub_skills_appropriate: 2
+        follow_up_offers_options: 1
+        no_monolith: 2
+    
+    - id: single_skill_appropriate
+      category: scope_assessment
+      priority: high
+      scenario: "User requests focused skill that should NOT be decomposed"
+      naive_failure: "Over-decomposes simple skill into unnecessary suite"
+      expert_behavior: "Recognizes focused scope, generates single comprehensive skill"
+      test_input: "Create a skill for writing git commit messages"
+      must_check:
+        - "Generates single skill (not a suite)"
+        - "Skill is comprehensive within its scope"
+        - "Does not propose decomposition"
+      anti_patterns:
+        - "I'll create a git-commit-index skill with sub-skills"
+        - "This should be decomposed into..."
+      scoring:
+        single_skill_generated: 3
+        comprehensive_within_scope: 3
+        no_unnecessary_decomposition: 2
+    
+    # ─────────────────────────────────────────────────────────────────────────
+    # EDGE CASE GENERATION TESTS
+    # ─────────────────────────────────────────────────────────────────────────
+    
+    - id: edge_case_generation_technical
+      category: edge_cases
+      priority: critical
+      scenario: "Building skill for technical domain with known gotchas"
+      naive_failure: "Generates skill without domain-specific edge cases"
+      expert_behavior: "Asks about domain gotchas OR infers them, generates edge case section"
+      test_input: "Create a skill for writing DAX formulas"
+      must_check:
+        - "Generated skill has domain_edge_cases section"
+        - "Edge cases are specific to DAX (row context, filter context, iterators)"
+        - "Includes test_input for each case"
+        - "Edge cases have must_check criteria"
+        - "Edge cases have anti_patterns"
+      anti_patterns:
+        - "Skill without domain_edge_cases section"
+        - "Generic edge cases not specific to DAX"
+        - "Edge cases that could apply to any programming domain"
+      scoring:
+        edge_cases_present: 3
+        domain_specific: 3
+        test_inputs_included: 2
+        anti_patterns_included: 2
+    
+    - id: edge_case_generation_creative
+      category: edge_cases
+      priority: high
+      scenario: "Building skill for creative domain"
+      naive_failure: "Omits edge cases because domain seems 'subjective'"
+      expert_behavior: "Identifies creative domain gotchas (tone drift, cliches, audience mismatch)"
+      test_input: "Create a skill for writing marketing copy"
+      must_check:
+        - "Generated skill has domain_edge_cases section"
+        - "Edge cases address creative pitfalls (cliches, tone, audience)"
+        - "Subjective domain still has testable criteria"
+      anti_patterns:
+        - "Creative skills don't need edge cases"
+        - "No domain_edge_cases section"
+      scoring:
+        edge_cases_present: 3
+        creative_pitfalls_addressed: 3
+        testable_criteria: 2
+    
+    # ─────────────────────────────────────────────────────────────────────────
+    # FOLLOW-UP PROPAGATION TESTS
+    # ─────────────────────────────────────────────────────────────────────────
+    
+    - id: follow_up_propagation
+      category: propagation
+      priority: critical
+      scenario: "Generated skill must itself produce follow-up menus"
+      naive_failure: "Generated skill has no follow-up menu instructions"
+      expert_behavior: "Generated skill includes Output Requirements mandating contextual follow-ups"
+      test_input: "Create a skill for writing product descriptions"
+      must_check:
+        - "Generated skill has Interactions section"
+        - "Interactions section requires follow-up menus after every output"
+        - "Examples in generated skill demonstrate follow-up menus"
+        - "Follow-up requirement specifies CONTEXTUAL, not generic"
+      anti_patterns:
+        - "Generated skill with no mention of follow-up menus"
+        - "Hardcoded generic follow-up options in generated skill"
+        - "Follow-up menus only in builder's output, not in generated skill's instructions"
+      scoring:
+        interactions_section_present: 2
+        follow_up_requirement_explicit: 3
+        examples_show_follow_ups: 2
+        contextual_requirement_stated: 3
+    
+    # ─────────────────────────────────────────────────────────────────────────
+    # VAGUE INPUT HANDLING TESTS
+    # ─────────────────────────────────────────────────────────────────────────
+    
+    - id: vague_input_zero_domain
+      category: vague_handling
+      priority: critical
+      scenario: "User gives completely vague input with no domain"
+      naive_failure: "Asks 'what kind of skill?' or sits paralyzed"
+      expert_behavior: "Shows categorized starter options OR picks common domain with defaults"
+      test_input: "create a skill"
+      must_check:
+        - "Does NOT ask generic clarifying questions"
+        - "Either shows categorized domain options OR generates with sensible default"
+        - "Follow-up menu allows narrowing domain"
+        - "Output is immediately useful, not a question"
+      anti_patterns:
+        - "What kind of skill would you like?"
+        - "Please provide more details about the domain"
+        - "I need more information to proceed"
+        - "Could you be more specific?"
+      scoring:
+        no_generic_questions: 3
+        actionable_output: 3
+        follow_up_allows_refinement: 2
+        immediate_value: 2
+    
+    - id: vague_input_with_domain
+      category: vague_handling
+      priority: high
+      scenario: "User gives domain but no specifics"
+      naive_failure: "Asks for specifics before generating"
+      expert_behavior: "Generates complete skill with smart defaults, follow-up offers refinement"
+      test_input: "make a skill for emails"
+      must_check:
+        - "Generates complete skill immediately"
+        - "Smart defaults applied (professional tone, business context)"
+        - "Follow-up offers to narrow (sales, apologies, cold outreach, etc.)"
+        - "Does not ask clarifying questions first"
+      anti_patterns:
+        - "What kind of emails?"
+        - "Who is the audience?"
+        - "Before I create this, I need to know..."
+      scoring:
+        immediate_generation: 3
+        defaults_applied: 2
+        follow_up_offers_refinement: 3
+        no_questions_first: 2
+    
+    # ─────────────────────────────────────────────────────────────────────────
+    # EXPERTISE CALIBRATION TESTS
+    # ─────────────────────────────────────────────────────────────────────────
+    
+    - id: expert_input_efficiency
+      category: calibration
+      priority: high
+      scenario: "Expert user provides detailed specification"
+      naive_failure: "Still asks questions, provides excessive scaffolding"
+      expert_behavior: "Directly generates skill matching spec, minimal explanation"
+      test_input: "Build a Claude skill for SQL query optimization. Focus on index analysis, query plans, and N+1 detection. Include 5 examples. Skip the basics."
+      must_check:
+        - "Generates directly without asking questions"
+        - "Respects 'skip the basics' constraint"
+        - "Includes exactly 5 examples as requested"
+        - "Adapts to Claude platform fully (uses expanded token budget)"
+        - "Minimal preamble/explanation"
+      anti_patterns:
+        - "Before we begin, let me ask..."
+        - "Here are the fundamentals of SQL..."
+        - "Would you like me to explain query optimization?"
+        - "Let me confirm your requirements..."
+      scoring:
+        direct_generation: 3
+        constraints_respected: 3
+        correct_example_count: 2
+        minimal_preamble: 2
+    
+    - id: novice_input_scaffolding
+      category: calibration
+      priority: medium
+      scenario: "Novice user with basic vocabulary"
+      naive_failure: "Generates expert-level skill with jargon"
+      expert_behavior: "Detects novice signals, includes more explanation in generated skill"
+      test_input: "i want to make ai help me write better stuff for my blog"
+      must_check:
+        - "Detects novice vocabulary ('stuff', informal phrasing)"
+        - "Generated skill includes more scaffolding/explanation"
+        - "Avoids jargon or explains it"
+        - "Follow-up menu uses accessible language"
+      anti_patterns:
+        - "Expert-level skill with unexplained jargon"
+        - "Assumes user knows prompt engineering concepts"
+      scoring:
+        novice_detection: 2
+        appropriate_scaffolding: 3
+        accessible_language: 3
+        jargon_avoided_or_explained: 2
+    
+    # ─────────────────────────────────────────────────────────────────────────
+    # PLATFORM ADAPTATION TESTS
+    # ─────────────────────────────────────────────────────────────────────────
+    
+    - id: platform_adaptation_chatgpt
+      category: platform
+      priority: high
+      scenario: "User requests skill for token-constrained platform"
+      naive_failure: "Generates full Claude-sized skill regardless of platform"
+      expert_behavior: "Compresses to fit platform, prioritizes core methodology"
+      test_input: "Create a ChatGPT skill for meeting notes"
+      must_check:
+        - "Output under 8K characters"
+        - "Core methodology preserved"
+        - "Examples reduced appropriately (2-3 not 5)"
+        - "Notes what was compressed or excluded"
+      anti_patterns:
+        - "Output exceeding 8K characters"
+        - "Full Claude-style skill with all sections uncompressed"
+        - "5+ examples when platform can't support them"
+      scoring:
+        size_constraint_met: 4
+        core_methodology_preserved: 3
+        compression_documented: 2
+        appropriate_example_count: 1
+    
+    - id: platform_adaptation_universal
+      category: platform
+      priority: medium
+      scenario: "User requests universal skill for all platforms"
+      naive_failure: "Generates only one version"
+      expert_behavior: "Generates Claude-optimized primary + compressed variant with documentation"
+      test_input: "Create a universal skill for code review that works on Claude, ChatGPT, and Gemini"
+      must_check:
+        - "Includes Claude-optimized full version"
+        - "Includes compressed variant for ChatGPT/Gemini"
+        - "Documents what's different between versions"
+        - "Notes platform-specific considerations"
+      anti_patterns:
+        - "Single version only"
+        - "No mention of platform differences"
+      scoring:
+        multiple_versions: 3
+        compression_documented: 2
+        platform_differences_noted: 2
+        full_and_compressed_included: 3
+    
+    # ─────────────────────────────────────────────────────────────────────────
+    # EDGE CASES / ERROR HANDLING TESTS
+    # ─────────────────────────────────────────────────────────────────────────
+    
+    - id: contradictory_requirements
+      category: error_handling
+      priority: high
+      scenario: "User gives impossible or contradictory constraints"
+      naive_failure: "Tries to satisfy all, produces confused output"
+      expert_behavior: "Identifies contradiction, asks for resolution, suggests alternatives"
+      test_input: "Create a skill that's comprehensive AND under 1000 tokens"
+      must_check:
+        - "Identifies the contradiction explicitly"
+        - "Offers resolution options via follow-up"
+        - "Does not produce garbage trying to satisfy both"
+        - "Suggests what's achievable at each constraint level"
+      anti_patterns:
+        - "Here's your comprehensive 1000-token skill:"
+        - "Generating without acknowledging the conflict"
+        - "Silently dropping one requirement"
+      scoring:
+        contradiction_identified: 3
+        resolution_options_offered: 3
+        no_garbage_output: 2
+        alternatives_suggested: 2
+    
+    - id: out_of_scope_request
+      category: error_handling
+      priority: medium
+      scenario: "User asks for something not a skill"
+      naive_failure: "Generates skill anyway or refuses completely"
+      expert_behavior: "Clarifies scope, redirects appropriately"
+      test_input: "Write me an email to my boss about taking vacation"
+      must_check:
+        - "Recognizes this is a task, not a skill request"
+        - "Offers to either do the task OR create a skill for it"
+        - "Doesn't generate a skill unprompted"
+      anti_patterns:
+        - "Here's an Email Writing Skill:"
+        - "I can only create skills, goodbye"
+      scoring:
+        correct_recognition: 3
+        appropriate_redirect: 3
+        options_offered: 2
+    
+    - id: skill_from_conversation_extraction
+      category: extraction
+      priority: high
+      scenario: "User wants to extract skill from prior successful interaction"
+      naive_failure: "Generates generic skill ignoring the conversation context"
+      expert_behavior: "Extracts patterns, methodology, examples from the conversation"
+      test_input: "That email prompt worked great. Turn it into a reusable skill."
+      must_check:
+        - "References specific elements from prior conversation"
+        - "Extracts what made it successful"
+        - "Generates skill embodying that specific approach"
+        - "Preserves the 'voice' or style that worked"
+      anti_patterns:
+        - "Here's a generic email skill:"
+        - "Ignoring conversation context entirely"
+        - "Starting from scratch without referencing prior exchange"
+      scoring:
+        conversation_referenced: 3
+        success_factors_extracted: 3
+        approach_preserved: 2
+        voice_maintained: 2
+    
+    # ─────────────────────────────────────────────────────────────────────────
+    # QUALITY ENFORCEMENT TESTS
+    # ─────────────────────────────────────────────────────────────────────────
+    
+    - id: minimum_edge_cases_enforced
+      category: quality_enforcement
+      priority: critical
+      scenario: "Generated skill must have minimum domain edge cases"
+      naive_failure: "Generates skill without edge cases section or with generic cases"
+      expert_behavior: "Enforces minimum edge case count based on domain complexity"
+      test_input: "Create a skill for SQL query optimization"
+      must_check:
+        - "Generated skill has domain_edge_cases section"
+        - "At least 4-6 edge cases for technical domain"
+        - "Edge cases are specific to SQL (query plans, indexes, N+1)"
+        - "Each case has must_check and anti_patterns"
+        - "tests/edge_cases.yaml would be generated"
+      anti_patterns:
+        - "Skill without domain_edge_cases section"
+        - "Only 1-2 edge cases for technical domain"
+        - "Generic edge cases applicable to any domain"
+      scoring:
+        edge_cases_present: 3
+        minimum_count_met: 2
+        domain_specific: 3
+        structure_complete: 2
+    
+    - id: cross_platform_consistency
+      category: quality_enforcement
+      priority: high
+      scenario: "Universal skill must work across platforms with consistent behavior"
+      naive_failure: "Generates Claude-specific skill for universal request"
+      expert_behavior: "Generates base skill + platform variants, documents differences"
+      test_input: "Create a universal skill for code documentation that works on Claude, ChatGPT, and Gemini"
+      must_check:
+        - "Generates Claude-optimized primary version"
+        - "Generates compressed variants for ChatGPT/Gemini"
+        - "Documents what's lost in compression"
+        - "Core methodology identical across platforms"
+        - "Follow-up menus work in all versions"
+      anti_patterns:
+        - "Single version without platform consideration"
+        - "ChatGPT version loses core functionality"
+        - "No documentation of platform differences"
+      scoring:
+        multi_version_generated: 3
+        compression_documented: 2
+        methodology_consistent: 3
+        differences_noted: 2
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # SCORING CONFIGURATION
+  # ─────────────────────────────────────────────────────────────────────────────
+  
+  scoring_config:
+    pass_threshold: 7  # out of 10 for individual cases
+    critical_must_pass: true  # critical priority cases must pass
+    weight_by_priority:
+      critical: 1.5
+      high: 1.0
+      medium: 0.75
+    
+    overall_pass_criteria:
+      minimum_score: 4.0  # out of 5
+      critical_pass_rate: 1.0  # 100% of critical cases must pass
+      high_pass_rate: 0.85  # 85% of high priority cases must pass
+      medium_pass_rate: 0.75  # 75% of medium priority cases must pass

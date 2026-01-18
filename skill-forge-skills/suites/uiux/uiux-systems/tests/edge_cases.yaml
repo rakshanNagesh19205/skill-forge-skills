@@ -1,0 +1,83 @@
+domain_edge_cases:
+  domain: "Design Systems / Tokens"
+  description: |
+    Edge cases specific to building design systems and token architectures.
+  
+  cases:
+    - id: arbitrary_values
+      scenario: "User provides inconsistent spacing values"
+      naive_failure: "Uses the arbitrary values as-is"
+      expert_behavior: "Maps to nearest systematic value, explains why"
+      test_input: "My spacing needs: 7px, 13px, 22px, 47px"
+      must_check:
+        - "Maps to systematic 4px-based values"
+        - "Explains why systematic > arbitrary"
+        - "Shows the mapping (7→8, 13→12, etc.)"
+      anti_patterns:
+        - "Using 7px, 13px directly in tokens"
+        - "No explanation of systematic approach"
+    
+    - id: overused_fonts
+      scenario: "User requests Inter or Roboto"
+      naive_failure: "Uses Inter/Roboto without comment"
+      expert_behavior: "Suggests Swiss-appropriate alternatives"
+      test_input: "Use Inter for the typography"
+      must_check:
+        - "Acknowledges the request"
+        - "Suggests alternatives (IBM Plex, Söhne, etc.)"
+        - "Explains why Swiss design avoids overused fonts"
+      anti_patterns:
+        - "Silently using Inter"
+        - "No mention of Swiss typography principles"
+    
+    - id: too_many_colors
+      scenario: "User wants extensive color palette"
+      naive_failure: "Generates 20+ color variations"
+      expert_behavior: "Constrains to Swiss-appropriate palette size"
+      test_input: "I need colors for every emotion and state"
+      must_check:
+        - "Limits to core neutral + 1 accent"
+        - "Semantic colors for states (success, error)"
+        - "Explains Swiss color restraint"
+      anti_patterns:
+        - "Here's your 50 color palette"
+        - "Purple, teal, orange, pink all as primaries"
+    
+    - id: missing_semantic_layer
+      scenario: "User only wants primitive tokens"
+      naive_failure: "Only provides gray-100, gray-200, etc."
+      expert_behavior: "Includes semantic layer for maintainability"
+      test_input: "Just give me the raw color values"
+      must_check:
+        - "Provides primitives as requested"
+        - "Also includes semantic aliases"
+        - "Explains why semantic layer matters"
+      anti_patterns:
+        - "Only primitive tokens, no semantic layer"
+        - "User must figure out when to use gray-600 vs gray-700"
+    
+    - id: no_dark_theme
+      scenario: "User doesn't mention dark mode"
+      naive_failure: "Only provides light theme tokens"
+      expert_behavior: "Includes dark theme structure by default"
+      test_input: "Create a color system for my app"
+      must_check:
+        - "Light theme tokens provided"
+        - "Dark theme structure included"
+        - "Explains how to toggle themes"
+      anti_patterns:
+        - "Only light theme, dark mode as afterthought"
+        - "No mention of theming architecture"
+    
+    - id: wrong_type_scale
+      scenario: "User picks non-standard type scale"
+      naive_failure: "Uses arbitrary pixel sizes"
+      expert_behavior: "Suggests mathematical ratio, explains benefits"
+      test_input: "Font sizes: 11px, 14px, 18px, 25px, 40px"
+      must_check:
+        - "Identifies the approximate ratio"
+        - "Suggests standardizing to nearest mathematical scale"
+        - "Explains visual harmony benefits"
+      anti_patterns:
+        - "Using arbitrary sizes without comment"
+        - "No mention of type scale ratios"

@@ -1,0 +1,83 @@
+domain_edge_cases:
+  domain: "Visual Design / Swiss Style"
+  description: |
+    Edge cases for applying Swiss design principles correctly.
+  
+  cases:
+    - id: gradient_removal
+      scenario: "User has gradient backgrounds"
+      naive_failure: "Keeps gradients or replaces with boring solid"
+      expert_behavior: "Removes gradient, creates interest through typography/spacing"
+      test_input: "Make this Swiss: background: linear-gradient(to right, #ff6b6b, #feca57)"
+      must_check:
+        - "Gradient is removed"
+        - "Replaced with solid color from palette"
+        - "Visual interest created through other Swiss means"
+      anti_patterns:
+        - "Keeping the gradient"
+        - "Just making it gray with no visual interest"
+    
+    - id: centered_text_fix
+      scenario: "User has center-aligned body text"
+      naive_failure: "Keeps centered text"
+      expert_behavior: "Converts to flush-left with proper measure"
+      test_input: "Fix: text-align: center on a paragraph"
+      must_check:
+        - "Changed to text-align: left"
+        - "Added max-width for readable measure"
+        - "Explained Swiss typography principle"
+      anti_patterns:
+        - "Keeping text-align: center"
+        - "No mention of flush-left principle"
+    
+    - id: too_many_fonts
+      scenario: "User has multiple font families"
+      naive_failure: "Keeps multiple fonts"
+      expert_behavior: "Consolidates to single Swiss-appropriate font"
+      test_input: "I'm using Poppins for headings, Open Sans for body, Lobster for accents"
+      must_check:
+        - "Recommends single font family"
+        - "Creates hierarchy through weight/size, not font changes"
+        - "Suggests Swiss-appropriate font option"
+      anti_patterns:
+        - "Keeping three different fonts"
+        - "Suggesting Inter or Roboto"
+    
+    - id: excessive_shadow
+      scenario: "User has dramatic drop shadows"
+      naive_failure: "Keeps heavy shadows"
+      expert_behavior: "Replaces with subtle elevation or border"
+      test_input: "Fix: box-shadow: 0 20px 60px rgba(0,0,0,0.4)"
+      must_check:
+        - "Shadow reduced significantly or removed"
+        - "Subtle alternative provided (shadow-sm or border)"
+        - "Explained Swiss approach to elevation"
+      anti_patterns:
+        - "Keeping dramatic shadow"
+        - "Just making shadow slightly smaller"
+    
+    - id: rainbow_palette
+      scenario: "User has too many colors"
+      naive_failure: "Keeps all colors"
+      expert_behavior: "Consolidates to neutral + single accent"
+      test_input: "My UI uses purple buttons, teal links, orange alerts, and pink highlights"
+      must_check:
+        - "Recommends single accent color"
+        - "Maps semantic meaning to appropriate colors"
+        - "Explains Swiss color restraint"
+      anti_patterns:
+        - "Keeping all four accent colors"
+        - "No mention of color restraint principle"
+    
+    - id: decorative_icons
+      scenario: "Icons used for decoration"
+      naive_failure: "Keeps decorative icons"
+      expert_behavior: "Removes or justifies each icon's purpose"
+      test_input: "I have sparkle emojis next to every heading"
+      must_check:
+        - "Recommends removing decorative elements"
+        - "Suggests functional alternatives if needed"
+        - "Explains Swiss principle of purposeful elements"
+      anti_patterns:
+        - "Keeping sparkle emojis"
+        - "Just changing emoji style"

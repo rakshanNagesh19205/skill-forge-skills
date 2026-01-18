@@ -1,0 +1,84 @@
+domain_edge_cases:
+  domain: "Accessibility / WCAG Compliance"
+  description: |
+    Edge cases for implementing accessible interfaces.
+  
+  cases:
+    - id: aria_overuse
+      scenario: "ARIA used when native HTML would work"
+      naive_failure: "Adds role='button' to everything"
+      expert_behavior: "Uses native HTML first, ARIA only when necessary"
+      test_input: "Make this div accessible: <div onclick='click()'>Submit</div>"
+      must_check:
+        - "Recommends <button> instead of div+role"
+        - "Explains first rule of ARIA"
+        - "Only uses ARIA when HTML insufficient"
+      anti_patterns:
+        - "<div role='button' tabindex='0'>"
+        - "Adding ARIA without mentioning native alternative"
+    
+    - id: decorative_vs_meaningful_images
+      scenario: "Alt text needed for some images, not others"
+      naive_failure: "Adds alt text to everything, or leaves all empty"
+      expert_behavior: "Distinguishes decorative from meaningful images"
+      test_input: "Add alt text: <img src='icon.svg'/><img src='product.jpg'/>"
+      must_check:
+        - "Decorative icon gets alt='' or aria-hidden"
+        - "Product image gets descriptive alt text"
+        - "Explains the difference"
+      anti_patterns:
+        - "alt='icon' on decorative image"
+        - "Empty alt on meaningful image"
+    
+    - id: color_contrast_edge
+      scenario: "Colors close to but not meeting contrast"
+      naive_failure: "Says 'looks fine' without checking"
+      expert_behavior: "Calculates exact ratio, suggests fix"
+      test_input: "Is #767676 on white accessible?"
+      must_check:
+        - "Calculates actual contrast ratio (4.48:1)"
+        - "Notes it fails AA for normal text (needs 4.5:1)"
+        - "Suggests darker alternative"
+      anti_patterns:
+        - "Looks accessible to me"
+        - "Should be fine"
+    
+    - id: focus_trap_in_modal
+      scenario: "Modal doesn't trap focus"
+      naive_failure: "Just adds tabindex without trap"
+      expert_behavior: "Implements full focus trap pattern"
+      test_input: "Make this modal accessible"
+      must_check:
+        - "Focus trapped inside modal"
+        - "Focus returns to trigger on close"
+        - "Escape key closes modal"
+        - "Background content is inert"
+      anti_patterns:
+        - "Just add tabindex"
+        - "Focus trap not mentioned"
+    
+    - id: reduced_motion_ignored
+      scenario: "Animation without motion preference check"
+      naive_failure: "Adds animation without prefers-reduced-motion"
+      expert_behavior: "Always includes reduced motion media query"
+      test_input: "Add a slide-in animation"
+      must_check:
+        - "Animation code includes prefers-reduced-motion"
+        - "Explains why this matters (vestibular disorders)"
+        - "Provides non-animated fallback"
+      anti_patterns:
+        - "Animation with no motion preference check"
+        - "Assuming everyone wants animation"
+    
+    - id: form_without_labels
+      scenario: "Form inputs using placeholder as label"
+      naive_failure: "Considers placeholder sufficient"
+      expert_behavior: "Adds proper labels, explains why"
+      test_input: "Is this accessible: <input placeholder='Email'/>"
+      must_check:
+        - "Notes placeholder is not a label"
+        - "Adds proper <label> element"
+        - "Explains placeholder disappears on input"
+      anti_patterns:
+        - "Placeholder is fine"
+        - "Add aria-label only"

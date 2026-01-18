@@ -1,0 +1,10 @@
+# Domain Edge Cases for marketing-copy
+# See SKILL.md Section 10/11/12 for full edge case definitions
+# This file enables automated testing of the skill
+
+test_suite:
+  skill: marketing-copy
+  version: 1.0.0
+  
+# Full edge case definitions are embedded in SKILL.md
+# This file references them for automated testing pipelines

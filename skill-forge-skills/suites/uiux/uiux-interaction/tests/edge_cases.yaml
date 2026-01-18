@@ -1,0 +1,83 @@
+domain_edge_cases:
+  domain: "Interaction Design / Animation"
+  description: |
+    Edge cases for implementing purposeful, Swiss-appropriate animations.
+  
+  cases:
+    - id: decorative_animation_request
+      scenario: "User wants gratuitous animation"
+      naive_failure: "Implements whatever flashy animation requested"
+      expert_behavior: "Suggests purposeful alternative, explains Swiss philosophy"
+      test_input: "Make the logo bounce continuously"
+      must_check:
+        - "Explains why continuous animation is problematic"
+        - "Suggests purposeful alternative (hover state, load animation)"
+        - "References Swiss motion philosophy"
+      anti_patterns:
+        - "Here's a bouncing logo animation"
+        - "No mention of purpose or restraint"
+    
+    - id: non_react_environment
+      scenario: "User isn't using React"
+      naive_failure: "Provides React Bits code anyway"
+      expert_behavior: "Offers CSS/vanilla JS alternatives"
+      test_input: "Add SplitText to my vanilla JS site"
+      must_check:
+        - "Notes React Bits requires React"
+        - "Provides CSS-only or vanilla JS alternative"
+        - "Achieves similar effect without React"
+      anti_patterns:
+        - "Just install React Bits"
+        - "Ignoring the vanilla JS constraint"
+    
+    - id: missing_reduced_motion
+      scenario: "Animation without accessibility consideration"
+      naive_failure: "Provides animation without reduced motion fallback"
+      expert_behavior: "Always includes prefers-reduced-motion handling"
+      test_input: "Add a page transition animation"
+      must_check:
+        - "Animation code includes reduced motion media query"
+        - "Explains why this matters"
+        - "Fallback doesn't break the UI"
+      anti_patterns:
+        - "Animation with no accessibility mention"
+        - "Assuming all users want motion"
+    
+    - id: slow_animation
+      scenario: "Animation timing is too slow"
+      naive_failure: "Uses arbitrary slow duration"
+      expert_behavior: "Follows duration guidelines, explains timing"
+      test_input: "Add a 3 second fade in to this card"
+      must_check:
+        - "Suggests more appropriate duration"
+        - "Explains why 3s is too slow for UI"
+        - "Provides timing guidelines"
+      anti_patterns:
+        - "Here's your 3 second animation"
+        - "No mention of duration best practices"
+    
+    - id: performance_heavy_animation
+      scenario: "Animation affects layout properties"
+      naive_failure: "Animates width, height, margin, etc."
+      expert_behavior: "Uses transform/opacity for performance"
+      test_input: "Animate the card width on hover"
+      must_check:
+        - "Suggests transform: scale instead of width"
+        - "Explains performance implications"
+        - "Provides performant alternative"
+      anti_patterns:
+        - "transition: width 300ms"
+        - "No performance consideration"
+    
+    - id: too_many_animations
+      scenario: "User wants animations on everything"
+      naive_failure: "Animates every element"
+      expert_behavior: "Recommends restraint, prioritizes key moments"
+      test_input: "Add animations to all my cards, buttons, links, and images"
+      must_check:
+        - "Recommends selective animation"
+        - "Prioritizes high-impact moments"
+        - "Explains Swiss restraint principle"
+      anti_patterns:
+        - "Here's animation for everything"
+        - "No mention of restraint or prioritization"

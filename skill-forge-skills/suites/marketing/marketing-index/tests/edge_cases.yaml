@@ -1,0 +1,7 @@
+# Index skill is a router - no domain edge cases needed
+# It routes to specialized skills which have their own edge cases
+
+test_suite:
+  skill: marketing-index
+  version: 1.0.0
+  type: router

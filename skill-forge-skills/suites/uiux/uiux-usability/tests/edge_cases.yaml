@@ -1,0 +1,85 @@
+domain_edge_cases:
+  domain: "Usability / UX Auditing"
+  description: |
+    Edge cases for conducting usability audits and providing fixes.
+  
+  cases:
+    - id: vague_criticism
+      scenario: "Audit produces vague feedback"
+      naive_failure: "Says 'the UI is confusing' without specifics"
+      expert_behavior: "Identifies exact elements and specific issues"
+      test_input: "This dashboard feels off, what's wrong?"
+      must_check:
+        - "Specific elements identified"
+        - "Heuristics referenced for each issue"
+        - "Location of problems clearly stated"
+      anti_patterns:
+        - "The dashboard is confusing"
+        - "It doesn't feel right"
+        - "Generic criticism without specifics"
+    
+    - id: no_fixes_provided
+      scenario: "Identifies problems without solutions"
+      naive_failure: "Lists problems but no actionable fixes"
+      expert_behavior: "Every problem has a specific, implementable fix"
+      test_input: "What's wrong with this form?"
+      must_check:
+        - "Every identified problem has a fix"
+        - "Fixes include code where applicable"
+        - "Fixes are specific, not 'make it better'"
+      anti_patterns:
+        - "This has poor usability"
+        - "You should improve the labels"
+        - "Criticism without solutions"
+    
+    - id: ignoring_context
+      scenario: "Audit ignores user context"
+      naive_failure: "Applies generic rules without considering use case"
+      expert_behavior: "Considers the specific user goals and context"
+      test_input: "Audit my internal admin tool"
+      must_check:
+        - "Considers that it's for internal users"
+        - "Adjusts recommendations for expert users"
+        - "Different standards than consumer app"
+      anti_patterns:
+        - "Treating admin tool like consumer app"
+        - "Demanding consumer-level onboarding"
+    
+    - id: aesthetic_over_usability
+      scenario: "Prioritizes looks over function"
+      naive_failure: "Focuses on visual issues when UX is broken"
+      expert_behavior: "Prioritizes functional fixes over aesthetic ones"
+      test_input: "The colors are ugly and the form doesn't submit"
+      must_check:
+        - "Prioritizes form submission fix (severity 4)"
+        - "Color issues are lower priority (severity 1-2)"
+        - "Clear severity ranking"
+      anti_patterns:
+        - "Let's fix the colors first"
+        - "Equal priority to all issues"
+    
+    - id: missing_positive_feedback
+      scenario: "Only negative criticism"
+      naive_failure: "Lists only problems, demoralizes user"
+      expert_behavior: "Notes what's working well alongside issues"
+      test_input: "Audit my landing page"
+      must_check:
+        - "Mentions positive aspects"
+        - "Balanced feedback"
+        - "Constructive tone"
+      anti_patterns:
+        - "Everything is wrong"
+        - "Only negative points listed"
+    
+    - id: no_severity_ranking
+      scenario: "All issues treated equally"
+      naive_failure: "Lists 20 issues with no prioritization"
+      expert_behavior: "Clear severity ranking, critical issues first"
+      test_input: "Full audit of my app"
+      must_check:
+        - "Severity ratings on each issue"
+        - "Issues ordered by severity"
+        - "Critical vs cosmetic clearly distinguished"
+      anti_patterns:
+        - "Here are 20 issues" (unsorted)
+        - "All issues presented equally"

@@ -1,0 +1,70 @@
+domain_edge_cases:
+  domain: "UI/UX Skill Routing"
+  description: |
+    Edge cases for correctly routing users to the right specialized skill.
+  
+  cases:
+    - id: multi_concern_request
+      scenario: "User has overlapping needs spanning multiple skills"
+      naive_failure: "Picks one skill arbitrarily, ignores other needs"
+      expert_behavior: "Identifies all relevant skills, suggests sequence"
+      test_input: "I need to redesign my dashboard - it's ugly and has usability issues"
+      must_check:
+        - "Identifies both uiux-visual AND uiux-usability needs"
+        - "Recommends starting with usability audit"
+        - "Suggests visual polish after UX fixes"
+      anti_patterns:
+        - "Just use uiux-visual"
+        - "Ignoring the usability concern"
+    
+    - id: wrong_skill_assumption
+      scenario: "User uses wrong terminology for their actual need"
+      naive_failure: "Routes based on words used, not actual need"
+      expert_behavior: "Clarifies actual need before routing"
+      test_input: "I need a design system"
+      must_check:
+        - "Asks clarifying question about scope"
+        - "Distinguishes system foundations from visual styling"
+        - "Offers both interpretations"
+      anti_patterns:
+        - "Immediately routing to uiux-systems"
+        - "Not clarifying what 'design system' means to them"
+    
+    - id: technology_mismatch
+      scenario: "User's tech stack differs from defaults"
+      naive_failure: "Assumes React when user has Vue/vanilla"
+      expert_behavior: "Asks about tech stack, adjusts recommendations"
+      test_input: "Add animations to my Vue app"
+      must_check:
+        - "Notes that React Bits is React-specific"
+        - "Offers alternatives for Vue (Vue Bits or manual)"
+        - "Doesn't blindly recommend React Bits"
+      anti_patterns:
+        - "Here's how to use React Bits in Vue"
+        - "Ignoring the Vue mention"
+    
+    - id: vague_request_handling
+      scenario: "User gives extremely vague input"
+      naive_failure: "Asks generic clarifying questions"
+      expert_behavior: "Presents organized options for selection"
+      test_input: "help me with design"
+      must_check:
+        - "Shows numbered skill options"
+        - "Doesn't ask open-ended question"
+        - "Each option clearly maps to a skill"
+      anti_patterns:
+        - "What kind of design do you need?"
+        - "Please provide more details"
+    
+    - id: complete_workflow_request
+      scenario: "User needs end-to-end project guidance"
+      naive_failure: "Routes to single skill"
+      expert_behavior: "Outlines multi-skill workflow sequence"
+      test_input: "I'm building a SaaS app and need to design everything"
+      must_check:
+        - "Recommends starting with uiux-systems"
+        - "Outlines full workflow path"
+        - "Mentions accessibility as final step"
+      anti_patterns:
+        - "Use uiux-visual for this"
+        - "Single skill recommendation only"
